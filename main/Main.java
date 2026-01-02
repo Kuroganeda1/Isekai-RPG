@@ -9,7 +9,7 @@ public class Main {
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
-        window.setTitle("RPG RP Game");
+        window.setTitle("Isekai RPG Game");
 
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);
