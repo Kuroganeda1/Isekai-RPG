@@ -17,6 +17,8 @@ public class Player extends Entity {
 
     public final int screenX;
     public final int screenY;
+    public int hasKey = 0;
+    public int level = 1;
 
     public Player(GamePanel iGp, KeyHandler iKeyH) {
         gp = iGp;
@@ -28,6 +30,8 @@ public class Player extends Entity {
         solidArea = new Rectangle(0, 0, 48, 48);
         solidArea.x = 8;
         solidArea.y = 16;
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
         solidArea.width = 32;
         solidArea.height = 32;
 
@@ -77,9 +81,13 @@ public class Player extends Entity {
                 direction = "right";
             }
 
-            // Checks for collision
+            // Checks for Tile collision
             collisionOn = false;
             gp.cCheck.checkTile(this);
+
+            // Checks for Object collision
+            int objIndex = gp.cCheck.checkObject(this, true);
+            pickUpObject(objIndex);
 
             if (collisionOn == false) {
                 switch (direction) {
@@ -110,6 +118,43 @@ public class Player extends Entity {
             }
         }
 
+    }
+
+    public void pickUpObject(int i) {
+
+        if (i != 999) {
+
+            String objectName = gp.obj[i].name;
+
+            switch (objectName) {
+                case "Key":
+                    gp.playSE(1);
+                    hasKey++;
+                    gp.obj[i] = null;
+                    gp.ui.showMessage("You picked up a key");
+                    break;
+                case "Door":
+                    gp.playSE(3);
+                    if (hasKey > 0) {
+                        gp.obj[i] = null;
+                        hasKey--;
+                        gp.ui.showMessage("You used a key");
+                    } else {
+                        gp.ui.showMessage("You need a key to open this door");
+                    }
+                    break;
+                case "Boots":
+                    gp.playSE(2);
+                    speed += 2;
+                    gp.obj[i] = null;
+                    gp.ui.showMessage("Speed boost!");
+                    break;
+                case "Chest":
+                    gp.playSE(3);
+                    gp.ui.showMessage("You opened the chest");
+                    break;
+            }
+        }
     }
 
     public void draw(Graphics2D g2) {

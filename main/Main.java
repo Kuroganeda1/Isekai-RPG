@@ -13,13 +13,16 @@ public class Main {
 
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);
-        gamePanel.startGameThread();
 
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.pack();
+
+        gamePanel.setupGame();
+        gamePanel.startGameThread();
 
         window.setLocationRelativeTo(null);
         window.setVisible(true);
+
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     }
 }
