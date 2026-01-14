@@ -3,25 +3,21 @@ package entity;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import main.GamePanel;
 import main.KeyHandler;
 
 public class Player extends Entity {
 
-    GamePanel gp;
     KeyHandler keyH;
-
     public final int screenX;
     public final int screenY;
-    public int hasKey = 0;
-    public int level = 1;
+    int standCounter = 0;
 
     public Player(GamePanel iGp, KeyHandler iKeyH) {
-        gp = iGp;
+
+        super(iGp);
+
         keyH = iKeyH;
 
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
@@ -48,21 +44,14 @@ public class Player extends Entity {
 
     public void getPlayerImage() {
 
-        try {
-            // Images for warrior character
-            up1 = ImageIO.read(getClass().getResourceAsStream("/res/player/boy_up_1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/res/player/boy_up_2.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("/res/player/boy_down_1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/res/player/boy_down_2.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("/res/player/boy_left_1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/res/player/boy_left_2.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("/res/player/boy_right_1.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/res/player/boy_right_2.png"));
-        }
-
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        up1 = setup("/res/player/boy_up_1");
+        up2 = setup("/res/player/boy_up_2");
+        down1 = setup("/res/player/boy_down_1");
+        down2 = setup("/res/player/boy_down_2");
+        left1 = setup("/res/player/boy_left_1");
+        left2 = setup("/res/player/boy_left_2");
+        right1 = setup("/res/player/boy_right_1");
+        right2 = setup("/res/player/boy_right_2");
     }
 
     public void update() {
@@ -123,37 +112,6 @@ public class Player extends Entity {
     public void pickUpObject(int i) {
 
         if (i != 999) {
-
-            String objectName = gp.obj[i].name;
-
-            switch (objectName) {
-                case "Key":
-                    gp.playSE(1);
-                    hasKey++;
-                    gp.obj[i] = null;
-                    gp.ui.showMessage("You picked up a key");
-                    break;
-                case "Door":
-                    gp.playSE(3);
-                    if (hasKey > 0) {
-                        gp.obj[i] = null;
-                        hasKey--;
-                        gp.ui.showMessage("You used a key");
-                    } else {
-                        gp.ui.showMessage("You need a key to open this door");
-                    }
-                    break;
-                case "Boots":
-                    gp.playSE(2);
-                    speed += 2;
-                    gp.obj[i] = null;
-                    gp.ui.showMessage("Speed boost!");
-                    break;
-                case "Chest":
-                    gp.playSE(3);
-                    gp.ui.showMessage("You opened the chest");
-                    break;
-            }
         }
     }
 
@@ -169,15 +127,7 @@ public class Player extends Entity {
                 if (spriteNum == 2) {
                     image = up2;
                 }
-                if (spriteNum == 3) {
-                    image = up2;
-                }
-                if (spriteNum == 4) {
-                    image = up2;
-                }
-                if (spriteNum == 5) {
-                    image = up2;
-                }
+
                 break;
             case "down":
                 if (spriteNum == 1) {
@@ -186,30 +136,13 @@ public class Player extends Entity {
                 if (spriteNum == 2) {
                     image = down2;
                 }
-                if (spriteNum == 3) {
-                    image = down1;
-                }
-                if (spriteNum == 4) {
-                    image = down2;
-                }
-                if (spriteNum == 5) {
-                    image = down1;
-                }
+
                 break;
             case "left":
                 if (spriteNum == 1) {
                     image = left1;
                 }
                 if (spriteNum == 2) {
-                    image = left2;
-                }
-                if (spriteNum == 3) {
-                    image = left2;
-                }
-                if (spriteNum == 4) {
-                    image = left2;
-                }
-                if (spriteNum == 5) {
                     image = left2;
                 }
                 break;
@@ -220,18 +153,9 @@ public class Player extends Entity {
                 if (spriteNum == 2) {
                     image = right2;
                 }
-                if (spriteNum == 3) {
-                    image = right2;
-                }
-                if (spriteNum == 4) {
-                    image = right2;
-                }
-                if (spriteNum == 5) {
-                    image = right2;
-                }
                 break;
         }
 
-        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(image, screenX, screenY, null);
     }
 }
